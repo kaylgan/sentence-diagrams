@@ -1,0 +1,209 @@
+:root {
+  --after-left: black;
+  --left-pad: 10px;
+  --gerund-offset: 0px;
+}
+
+body.background {
+  overflow: scroll;
+}
+
+html {
+  height: 100%;
+  background-image: radial-gradient(73% 147%, #EADFDF 59%, #ECE2DF 100%), radial-gradient(91% 146%, rgba(255,255,255,0.50) 47%, rgba(0,0,0,0.50) 100%);
+  background-blend-mode: screen;
+
+  /* background: linear-gradient(to bottom, #D5DEE7 0%, #E8EBF2 50%, #E2E7ED 100%), linear-gradient(to bottom, rgba(0,0,0,0.02) 50%, rgba(255,255,255,0.02) 61%, rgba(0,0,0,0.02) 73%), linear-gradient(33deg, rgba(255,255,255,0.20) 0%, rgba(0,0,0,0.20) 100%);
+ background-blend-mode: normal,color-burn; */
+}
+
+#parent {
+  border: 2px solid gray;
+  border-radius: 10px;
+  color: gray;
+  height: 80vh;
+  margin: 0 auto;
+  position: relative;
+  background-color: white;
+}
+
+#selectionRectangle {
+  border: 1px dotted #000;
+  position: absolute;
+}
+
+textarea {
+  resize: none;
+  border-style: none;
+  border-top-style: dotted;
+  height: 10%;
+  width: 99.9%;
+  overflow-y: scroll;
+  position: absolute;
+  bottom: 8px;
+  margin: 0 auto;
+}
+
+#addButton {
+  right: 20px;
+}
+
+#clearButton {
+  right: 80px;
+}
+
+.taButtons {
+  position: absolute;
+  bottom: 0;
+  background-color: #f7f7f7;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
+  background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
+  background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
+  background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
+  background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);
+  color: #a7a7a7;
+  border-radius: 10px;
+  /* margin-left: 50%; */
+}
+
+.taButton:hover {
+  color: #555;
+  background: #f5f5f5;
+}
+
+.draggable {
+  cursor: move;
+  color: black;
+  position: absolute;
+  z-index: 9;
+  border-bottom: 3px solid black;
+  text-align: center;
+  user-select: none; /* don't highlight text */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.addedLine {
+  cursor: move;
+  position: absolute;
+  z-index: 9;
+  border-left: 3px solid var(--after-left); /* was border-bottom */
+  height: 50px;
+  top: 50%;
+  left: 2%;
+}
+
+.addedPlatform {
+  cursor: move;
+  position: absolute;
+  z-index: 9;
+  border-left: 3px solid var(--after-left); /* was bottom */
+  height: 25px;
+  top: 60%;
+  left: 2%;
+}
+
+.addedPlatform:after {
+  content: '';
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  border-top: 3px solid var(--after-left); /* was left */
+  border-left: 3px solid var(--after-left); /* was bottom */
+  bottom: -20px; /* was 25 top*/
+  left: -10px; /* was -10 left */
+  transform: rotate(45deg);
+}
+
+/* --------------------------------BORDER STYLES-------------------------------- */
+.dashed {
+  border-bottom-style: dashed;
+}
+
+.dashedLeft {
+  border-left-style: dashed;
+}
+
+.roundBorder {
+  border-left: 3px solid black;
+  border-bottom-left-radius: 18px;
+  padding-left: 15px;
+}
+
+.roundBorder:after {
+  content: '';
+  border-left: 3px solid var(--after-left);
+  position: absolute;
+  height: 15px;
+  width: 0;
+  top: -15px;
+  left: -2.5px;
+}
+
+.leftBorder {
+  border-left: 3px solid black;
+  padding-left: var(--left-pad);
+}
+
+/* for added blank lines */
+.leftBorderLine {
+  width: 8.25px;
+  padding-left: var(--left-pad);
+  transform: rotate(90deg) scaleX(-1);
+}
+
+.leftBorderLong {
+  border-left: 3px solid var(--after-left);
+  padding-left: var(--left-pad);
+}
+
+.leftBorderLong:after {
+  content: '';
+  border-left: 3px solid var(--after-left);
+  position: absolute;
+  height: 15px;
+  width: 0;
+  top: 15px;
+  left: -2.5px;
+}
+
+.slantBorder {
+  padding-left: var(--left-pad);
+}
+
+.slantBorder:after {
+  content: '';
+  border-left: 3px solid var(--after-left);
+  position: absolute;
+  height: 20px;
+  width: 0;
+  top: 0;
+  left: -4px;
+  transform: rotate(-25deg);
+}
+
+.gerundBorder {
+}
+
+.gerundBorder:after {
+  content: 'ing';
+  border-left: 3px solid var(--after-left);
+  border-bottom: 3px solid var(--after-left);
+  position: absolute;
+  top: 18px;
+  right: -28px;
+  padding-left: 6px;
+}
+
+.lAlign {
+  text-align: left;
+}
+
+.cAlign {
+  text-align: center;
+}
+
+.rAlign {
+  text-align: right;
+}

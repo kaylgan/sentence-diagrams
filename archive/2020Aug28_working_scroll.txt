@@ -1,0 +1,212 @@
+// get initial viewport width
+let initWinWidth = (function() {
+  const maxWidth = 0.95*(window.innerWidth);
+  document.getElementById("parent").style.width = maxWidth + "px";
+  return function() { return maxWidth; }
+})();
+
+// get sibling element offsets for each draggable
+let getOffset = (function(lookup = null, set = false, myMap = {}) {
+  let offsetMap = {};
+  let offset = 0;
+  return function (lookupInner = lookup, setInner = set, mapInner = myMap) {
+    if (setInner == true) {
+      offsetMap = mapInner;
+    } else if (lookupInner) {
+      offset = offsetMap.get(lookupInner);
+    }
+    return offset;
+  }
+})();
+
+// add event listeners for draggables, slider, buttons
+configureElements();
+
+// get all elements to add listeners to them
+function configureElements() {
+  let elements = document.getElementsByClassName("draggable");
+  arrangeElements(elements);
+  // window.addEventListener('resize', function() { arrangeElements(elements); }, false); // rearrange elements if window resized
+
+  for (let i = 0; i < elements.length; i++) {
+    dragElement(elements[i]);
+  }
+
+  slider();
+  buttons();
+}
+
+// align elements to siblings (absolute positioning for drag/drop)
+function arrangeElements(elmntArray) {
+  let offset = 0;
+  let offsetY = 0;
+  let margin = 5; // space between words
+  let marginY = 10; // space between lines
+  let maxContentWidth = initWinWidth();
+
+  let offsetMap = new Map();
+  offsetMap.set(elmntArray[0], [0, 0]);
+
+  // start at 1; don't need to reposition first element
+  for (let i = 1; i < elmntArray.length; i++) {
+    offset += elmntArray[i].previousElementSibling.getBoundingClientRect().width + margin;
+    if ((offset + elmntArray[i].getBoundingClientRect().width + margin) >= maxContentWidth) {
+      offset = 0;
+      offsetY += elmntArray[0].getBoundingClientRect().height + marginY;
+    }
+
+    elmntArray[i].style.left = offset + 'px';
+    elmntArray[i].style.top = offsetY + 'px';
+    offsetMap.set(elmntArray[i], [offset, offsetY]);
+  }
+
+  // save offsets
+  getOffset(null, true, offsetMap);
+}
+
+// set up slider
+function slider() {
+  let rangeslider = document.getElementById("lineSizeSlider");
+  let rangeValue = document.getElementById("rangeValue");
+  rangeslider.oninput = function() {
+    let currentElement = lastSelectedElement();
+    if (currentElement) {
+      currentElement.style.width = this.value + 'px';
+      rangeValue.innerHTML = this.value;
+    }
+  }
+}
+
+// set up buttons
+function buttons() {
+  let myButtons = document.getElementsByClassName("menuBtn");
+  for (let i = 0; i < myButtons.length; i++) {
+    myButtons[i].addEventListener('click', function() {
+      let btnText = myButtons[i].innerHTML;
+      let currentElement = lastSelectedElement();
+      if (btnText == "dashed" || btnText == "solid") {
+        currentElement.style.borderBottomStyle = btnText;
+      } else {
+        currentElement.style.textAlign = btnText;
+      }
+    }, false);
+  }
+}
+
+// get location of element
+function findPos(element) {
+  let curleft = curtop = 0;
+  let initialElement = element;
+  if (element.offsetParent) {
+    do {
+      curleft += element.offsetLeft;
+      curtop += element.offsetTop;
+    } while (element = element.offsetParent);
+  }
+
+  // subtract offset from element's siblings
+  getOffset(initialElement);
+  curleft -= getOffset(initialElement)[0];
+  curtop -= getOffset(initialElement)[1];
+
+  // grab by bottom corner instead of top
+  // curtop += initialElement.getBoundingClientRect().height;
+
+  // grab middle of element
+  // curleft += Math.round((initialElement.getBoundingClientRect().width)/2);
+
+  return { x: curleft, y: curtop };
+}
+
+// get the most recently dragged element
+let lastSelectedElement = (function(set = false, setValue = null) {
+  let currentElement = null;
+  return function(setInner = set, setValueInner = setValue) {
+    if (setInner === true) {
+
+      if (currentElement) {
+        // if a new element is dragged, deselect the previous element
+        currentElement.style.borderColor = 'black';
+      }
+
+      if (setValueInner) {
+        // update the currently selected element
+        currentElement = setValueInner;
+        // if a new element is dragged, select it
+        currentElement.style.borderColor = 'lightgreen';
+      } else {
+        // if the window area is clicked, deselect the previous element
+        currentElement.style.borderColor = 'black';
+      }
+
+    } else {
+      // if set is false, just return the last element selected
+      return currentElement;
+    }
+  }
+})();
+
+function deselectAll() {
+  lastSelectedElement(true, null);
+}
+
+// apply event listeners
+function dragElement(elmnt) {
+  let elementX = 0, elementY = 0, cursorX = 0, cursorY = 0;
+
+  let pos = findPos(elmnt);
+  elementX = pos.x;
+  elementY = pos.y;
+  let currentRotation = 0;
+
+  window.addEventListener('dblclick', deselectAll, false);
+  elmnt.addEventListener('mousedown', dragMouseDown, false);
+  elmnt.addEventListener('dblclick', rotate, false);
+
+  function dragMouseDown(e) {
+    e.preventDefault();
+
+    // set this element as the currently selected element
+    lastSelectedElement(true, elmnt);
+
+    // get element's initial coordinates, accounting for parent offsets
+    elementX = e.clientX - pos.x;
+    elementY = e.clientY - pos.y;
+
+    // get new cursor position
+    cursorX = e.clientX;
+    cursorY = e.clientY;
+
+    window.addEventListener('mouseup', closeDragElement, false);
+    window.addEventListener('mousemove', elementDrag, false);
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+
+    // update element position
+    elmnt.style.left = elementX + e.clientX - cursorX + window.pageXOffset + 'px';
+    elmnt.style.top = elementY + e.clientY - cursorY + window.pageYOffset + 'px';
+  }
+
+  // stop moving when mouse button is released
+  function closeDragElement() {
+    window.removeEventListener('mouseup', closeDragElement, false);
+    window.removeEventListener('mousemove', elementDrag, false);
+  }
+
+  // rotate element 45 degrees when double clicked
+  function rotate() {
+    elmnt.style.transformOrigin = 'left';
+    currentRotation += 45;
+    if (currentRotation == 360) {
+      currentRotation = 0;
+    }
+    // 135 to 315
+    if (currentRotation >= 135 && currentRotation < 270) {
+      currentRotation = 270;
+    }
+    elmnt.style.transform = 'rotate(' + currentRotation + 'deg)';
+  }
+}

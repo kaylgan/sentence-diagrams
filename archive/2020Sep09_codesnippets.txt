@@ -1,0 +1,158 @@
+function dragMultiple(elmnts) {
+  console.log("in dragMultiple with " + elmnts);
+  let current = lastSelectedElement();
+  // let oldRight = current.getBoundingClientRect().right;
+  // let oldBottom = current.getBoundingClientRect().bottom;
+
+  // oldRightB + newLeft - oldRight = newLeftB
+  let oldRight = current.getBoundingClientRect().right;
+  let oldBottom = current.getBoundingClientRect().bottom;
+  // oldBottomB + newTop - oldBottom = newTopB
+  dragElement(current);
+  current.addEventListener('mousedown', dragMouseDownMult, false);
+  let oldRightB = elmnts[1].getBoundingClientRect().right;
+  let oldBottomB = elmnts[1].getBoundingClientRect().bottom;
+
+  ////
+  // let oldRights = [];
+  // let oldBottoms = [];
+  // for (let i = 0; i < elmnts.length; i++) {
+  //   // remove currently selected element from array
+  //   const index = elmnts.indexOf(current);
+  //   if (index > -1) {
+  //     elmnts.splice(index, 1);
+  //   }
+  //
+  //   // add remaining element positions to arrays
+  //   oldRights.push[elmnts[i].getBoundingClientRect().right];
+  //   oldBottoms.push[elmnts[i].getBoundingClientRect().bottom];
+  // }
+
+  ////
+  // current.addEventListener('mousedown', dragMouseDownMult, false);
+  //
+  // let correctionFactorX = parseFloat(window.getComputedStyle(document.body).getPropertyValue('margin-left'));
+  // correctionFactorX += parseFloat(window.getComputedStyle(document.getElementById("parent")).getPropertyValue('margin-left'));
+  // let correctionFactorY = parseFloat(window.getComputedStyle(document.body).getPropertyValue('margin-top'));
+  //
+  // function dragMouseDownMult() {
+  //   window.addEventListener('mousemove', function() {
+  //     let newLeft = current.getBoundingClientRect().left;
+  //     let newTop = current.getBoundingClientRect().top;
+  //
+  //     // oldRightB + newLeft - oldRight = newLeftB; oldBottomB + newTop - oldBottom = newTopB
+  //     for (let i = 0; i < elmnts.length; i++) {
+  //       elmnts[i].style.left = oldRights[i] + newLeft - oldRight - elmnts[i].getBoundingClientRect().width + 'px';
+  //       elmnts[i].style.top = oldBottoms[i] + newTop - oldBottom - elmnts[i].getBoundingClientRect().height + correctionFactorY + 3 + 'px';
+  //     }
+  //   }, false);
+  // }
+
+
+
+  function dragMouseDownMult() {
+    window.addEventListener('mousemove', function() {
+      let newLeft = current.getBoundingClientRect().left;
+      let newTop = current.getBoundingClientRect().top;
+
+      // oldRightB + newLeft - oldRight = newLeftB; oldBottomB + newTop - oldBottom = newTopB
+      elmnts[1].style.left = oldRightB + newLeft - oldRight - current.getBoundingClientRect().width + 'px';
+      elmnts[1].style.top = oldBottomB + newTop - oldBottom - current.getBoundingClientRect().height + 8 + 3 + 'px'; // add body margin, elmnt border
+    }, false);
+  }
+}
+
+
+
+function dragMultiple(elmnts) {
+  // oldRightB + newLeft - oldRight = newLeftB
+  let oldRight = elmnts[0].getBoundingClientRect().right;
+  let oldBottom = elmnts[0].getBoundingClientRect().bottom;
+  // oldBottomB + newTop - oldBottom = newTopB
+  
+  let oldRightB = elmnts[1].getBoundingClientRect().right;
+  let oldBottomB = elmnts[1].getBoundingClientRect().bottom;
+
+  dragElement(elmnts[0]);
+  elmnts[0].addEventListener('mousedown', dragMouseDownMult, false);
+
+  function dragMouseDownMult() {
+    window.addEventListener('mousemove', function() {
+      let newLeft = elmnts[0].getBoundingClientRect().left;
+      let newTop = elmnts[0].getBoundingClientRect().top;
+
+      elmnts[1].style.left = oldRightB + newLeft - oldRight - elmnts[1].getBoundingClientRect().width + 'px';
+      elmnts[1].style.top = oldBottomB + newTop - oldBottom - elmnts[1].getBoundingClientRect().height + 8 + 3 + 'px'; // add body margin, elmnt border
+    }, false);
+  }
+}
+
+
+
+
+working:
+draw rect around elements
+drag 0
+let go and drag again
+
+last two elements are squishing if dragged by themselves
+
+window.addEventListener('mousemove', function() {
+      let newLeft = elmnts[0].getBoundingClientRect().left;
+      let newTop = elmnts[0].getBoundingClientRect().top;
+      let wordSpace = 5;
+      let xMovement = newLeft - oldRight;
+      let yMovement = newTop - oldBottom;
+      let widthDifference = elmnts[1].getBoundingClientRect().width - elmnts[0].getBoundingClientRect().width;
+      // let widerWidth = ((elmnts[1].getBoundingClientRect().width > elmnts[0].getBoundingClientRect) ? elmnts[1].getBoundingClientRect().width : elmnts[0].getBoundingClientRect().width);
+      let narrowerWidth = Math.min(elmnts[1].getBoundingClientRect().width, elmnts[0].getBoundingClientRect().width);
+
+      if (elmnts[1].getBoundingClientRect().width >= elmnts[0].getBoundingClientRect().width) {
+        // elmnts[1].style.left = oldRights[1] + xMovement - widthDifference - elmnts[0].getBoundingClientRect().width + 'px';
+        elmnts[1].style.left = oldRights[1] + xMovement - widthDifference - narrowerWidth + 'px';
+        elmnts[1].style.top = oldBottoms[1] + yMovement - elmnts[1].getBoundingClientRect().height + correctionFactorY + 'px';
+
+        for (let i = 2; i < elmnts.length; i++) {
+          elmnts[i].style.left = oldRights[i] + xMovement - elmnts[i].getBoundingClientRect().width + 'px';
+          elmnts[i].style.top = oldBottoms[i] + yMovement - elmnts[i].getBoundingClientRect().height + correctionFactorY + 'px';
+        }
+      } else {
+        for (let i = 1; i < elmnts.length; i++) {
+          elmnts[i].style.left = oldRights[i] + xMovement - widthDifference - elmnts[i].getBoundingClientRect().width + 'px';
+          elmnts[i].style.top = oldBottoms[i] + yMovement - elmnts[i].getBoundingClientRect().height + correctionFactorY + 'px';
+        }
+        // elmnts[1].style.left = oldRights[1] + xMovement - widthDifference - elmnts[1].getBoundingClientRect().width - wordSpace + 'px';
+        // elmnts[1].style.top = oldBottoms[1] + yMovement - elmnts[1].getBoundingClientRect().height + correctionFactorY + 'px';
+
+      }
+
+    }, false);
+	
+	
+	
+	
+	
+	
+let positions = [];
+        for (let i = 0; i < selectedElements.length; i++) {
+          selectedElements[i].style.position = 'element(#selectionRectangle)';
+          positions.push(selectedElements[i].style.position);
+        }
+        console.log(selection.getBoundingClientRect().left + "," + selection.getBoundingClientRect().top);
+        window.addEventListener('dblclick', function() {
+          // selection.hidden = true;
+          console.log(positions[0]);
+          for (let i = 0; i < selectedElements.length; i++) {
+            // image.style.top = (image.offsetTop - square.offsetTop) + 'px';
+            // image.style.left = (image.offsetLeft - square.offsetLeft) + 'px';
+            // square.appendChild(image);
+            // let xBefore = findPos(selection).x;
+            // let yBefore = findPos(selection).y;
+            selectedElements[i].style.position = positions[i];
+
+            parent.appendChild(selectedElements[i]);
+            // selectedElements[i].style.position = 'absolute';
+            // selectedElements[i].style.left = parent.offsetLeft + selection.getBoundingClientRect().left + selectedElements[i].getBoundingClientRect().left + 'px';
+            // selectedElements[i].style.top = parent.offsetTop + selection.getBoundingClientRect().top + selectedElements[i].getBoundingClientRect().top + 'px';
+            // selectedElements[i].style.left = xBefore +  selection.getBoundingClientRect().left;
+            // selectedElements[i].style.top = yBefore + selection.getBoundingClientRect().top;

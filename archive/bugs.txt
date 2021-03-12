@@ -1,0 +1,37 @@
+resolved 20200910: added line style does not change to dashed
+  added additional class for dashed left border
+resolved 20200910: object style added to line is on wrong side
+  added additional class, leftBorderLine
+addressed 20200910: cursor gets in the way when moving elements upward
+  added response to arrow key presses
+resolved 20200910: dragMultiple DOES support arrow movement, but have to move mouse for positions to update
+  added function for multi arrow movement, adjusted calculation to update correctly so mouse movement doesn't change position
+resolved 20200910: have to click and re-double click to stop dragging multiple
+    moved dblclick listener and moveElements() out of dragMouse function
+resolved 20200910: reset color picker default after selecting? otherwise not updating on move? (new elements are picking up last el line color)
+    added currentLineColor(currentElement.style.borderColor, true); before light green highlighting
+addressed 20200910: parentheses around platforms - can't add words like "(   )" and maintain space
+    just add each ( ) as a new word
+added 20200911: delete
+addressed 20200911: slider doesn't move with arrows anymore
+  added -= key resizing
+resolved 20200910: rotation
+  added 1-5 key rotations
+
++ add on focus to buttons in text area
++ color all not updating with currently selected element
++ delete multiple not working as expected... works okay unless elements are rotated?
++ resize also not working with rotation
++ on second drag, multiple elements not updating with arrow keys until after mouse movement
++ line/platform rotation cursor position
++ don't apply gerunds, etc. to line/platform (but do apply line color/text color, alignment)
++ return (new line) in text area keeps words as one
++ gerund change selection errors --> probably need a map to save all initial values, like offsets
+
++ feature: autoguess word types?
++ basic function: remove punctuation
++ feature: save and load
+  pre - add single element with specified position, rotation, text, etc.
++ basic function: how to
++ basic function: security?
+	https://css-tricks.com/serious-form-security/

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Drag-and-Drop Sentences</title>
+    <link href="fontawesome-free-5.14.0-web/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="buttonStyles.css">
+    <link rel="stylesheet" href="tooltipStyles.css">
+    <link rel="stylesheet" href="sliderStyles.css">
+  </head>
+  <body>
+
+    <div id="parent">
+      <div id="selectionRectangle" hidden></div>
+      <span class="draggable">Type</span>
+      <span class="draggable">your</span>
+      <span class="draggable">sentence</span>
+      <span class="draggable">below.</span>
+
+      <textarea name="name" rows="1" cols="80" placeholder="Type your sentence here ---> Click add ---> Click or drag a word to select it ---> Apply styles using the buttons below. Resize: type - or =. Rotate: type 1-5."></textarea>
+      <button type="button" class="taButtons" id="addButton">Add</button>
+      <button type="button" class="taButtons" id="clearButton">Clear</button>
+    </div>
+
+    <div class="page-wrap">
+		<nav>
+			<ul class="nav">
+            <li><p class="tooltip" id="alignLeft"><i class="fas fa-align-left"></i><span class="tooltiptext">align left</span></p></li>
+		        <li><p class="tooltip" id="alignCenter"><i class="fas fa-align-center"></i><span class="tooltiptext">align center</span></p></li>
+            <li><p class="tooltip" id="alignRight"><i class="fas fa-align-right"></i><span class="tooltiptext">align right</span></p></li>
+            <li><p class="tooltip" id="colorText"><i class="fas fa-font"></i><i class="fas fa-palette small"></i><span class="tooltiptext">text color</span></p></li>
+            <li><p class="tooltip" id="allText"><i class="fas fa-font"></i><i class="fas fa-eye-dropper small"></i><span class="tooltiptext">apply to all</span></p></li>
+
+            <li><p class="tooltip" id="solidDashed"><i class="fas fa-border-style"></i><span class="tooltiptext">line style</span></p></li>
+    				<li><p class="tooltip" id="colorLine"><i class="fas fa-palette"></i><span class="tooltiptext">line color</span></p></li>
+            <li><p class="tooltip" id="allLines"><i class="fas fa-eye-dropper"></i><span class="tooltiptext">apply to all</span></p></li>
+
+            <li><p class="tooltip" id="verb">vb.<span class="tooltiptext">verb</span></p></li>
+            <li><p class="tooltip" id="object">obj.<span class="tooltiptext">object</span></p></li>
+            <li><p class="tooltip" id="complement">cmpl.<span class="tooltiptext">complement</span></p></li>
+            <li><p class="tooltip" id="participle">part.<span class="tooltiptext">participle</span></p></li>
+            <li><p class="tooltip" id="gerund">ger.<span class="tooltiptext">gerund</span></p></li>
+
+    				<li><p class="tooltip" id="newLine"><i class="fas fa-slash"></i><span class="tooltiptext">add new line</span></p></li>
+            <li><p class="tooltip" id="platform"><i class="fas fa-chevron-up"></i><span class="tooltiptext">add platform</span></p></li>
+            <li><p class="tooltip pressed" id="showTT"><i class="fas fa-comment-alt"></i><span class="tooltiptext">show tooltips</span></p></li>
+            <li>
+              <div class="slideContainer">
+                <input class="slider" name="mySlider" id="lineSizeSlider" type="range" min="10" max="500" value="260" >
+                <label for="mySlider" id="rangeValue"></label>
+              </div>
+            </li>
+			</ul>
+		</nav>
+
+      <!-- Hidden Options -->
+      <input name="lineColor" id="lineColor" type="color" value="black" hidden>
+      <input name="textColor" id="textColor" type="color" value="black" hidden>
+	</div>
+
+    <script type="text/javascript" src="drag-drop-script.js"></script>
+  </body>
+</html>

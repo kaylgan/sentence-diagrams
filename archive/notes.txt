@@ -1,0 +1,71 @@
+2020Aug28
+going to add window.onresize handler, arrange elements vertically
+decided to fix parent width, scroll on resize to avoid moving elements after placed
+
+let closure = (function(aVar = null) {
+  let variable = 0;
+  return function(bVar = aVar) {}
+})();
+
+mouseup and mousemove must be applied to window to prevent element from being dropped by accident
+
+removed this calculation for updating position - does not work with relative positions
+// calculate the new cursor position:
+elementX = cursorX - e.clientX;
+elementY = cursorY - e.clientY;
+cursorX = e.clientX;
+cursorY = e.clientY;
+
+// set the element's new position:
+elmnt.style.top = (elmnt.offsetTop - elementY) + "px";
+elmnt.style.left = (elmnt.offsetLeft - elementX) + "px";
+
+
+//elementX = elmnt.getBoundingClientRect().x - offset - elmnt.parentElement.offsetLeft;
+
+
+window.removeEventListener('mouseup', closeDragElement, false); // document.onmouseup = null;
+window.removeEventListener('mousemove', elementDrag, false); // document.onmousemove = null;
+elmnt.addEventListener('mousedown', dragMouseDown, false); // elmnt.onmousedown = dragMouseDown;
+
+
+
+for relative positioning; not working
+// add offset for siblings
+function getOffset(element) {
+  let curleft = curtop = 0;
+  // if (element.previousElementSibling) {
+  //   do {
+  //     curleft += element.previousElementSibling.offsetLeft;
+  //     curtop += element.previousElementSibling.offsetTop;
+  //   } while (element = element.previousElementSibling);
+  //   return { x: curleft, y: curtop };
+  // }
+
+  let numSibs = 0;
+  let siblingOffset = 0;
+  while (element.previousElementSibling) {
+    numSibs += 1;
+    siblingOffset += element.previousElementSibling.offsetLeft;
+    element = element.previousElementSibling;
+  }
+  console.log("has " + numSibs + " siblings");
+  console.log("offset: " + siblingOffset);
+
+  // let currentElement = element;
+  // let offset = 0;
+  // if (currentElement.previousElementSibling) {
+  //   console.log("sib: " + currentElement.previousElementSibling);
+  //   offset += currentElement.previousElementSibling.offsetLeft;
+  //   console.log("offset: " + offset);
+  // }
+  return siblingOffset;
+}
+
+
+removing this so cursor doesn't snap to position on element, just where selected
+// elementX = e.clientX - pos.x;
+// elementY = e.clientY - pos.y;
+
+map
+stackoverflow.com/questions/3559070
